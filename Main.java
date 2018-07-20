@@ -47,7 +47,7 @@ public class Main extends Deck{
 			pBet = yourBet.nextInt();
 			if (pBet>pWallet)
 				System.out.println("not enough money");
-			if (pBet<pWallet)
+			if (pBet<=pWallet)
 				eMoney = false;
 			}
 		
