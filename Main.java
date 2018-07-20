@@ -127,7 +127,6 @@ public class Main extends Deck implements ActionListener{
         
         else if (name.equals("goSetting")) {
             
-        	System.out.println("In settings."); //debug
             Container containS;  
             containS = getContentPane();
             containS.removeAll();
@@ -202,7 +201,7 @@ public class Main extends Deck implements ActionListener{
             i2.setFont(new Font("Serif", Font.PLAIN, 14));
             InstructionPanel.add (i2); 
             
-            JLabel i2a = new JLabel("going over 21");
+            JLabel i2a = new JLabel("going over 21.");
             i2a.setSize(700,40);
             i2a.setLocation(40,155);
             i2a.setFont(new Font("Serif", Font.PLAIN, 14));
@@ -369,7 +368,7 @@ public class Main extends Deck implements ActionListener{
     
     public void buildTable() {
     	
-    	JButton buttonDeal, buttonHit, buttonStay, buttonDoubleDown, buttonSplit; 
+    	JButton buttonDeal, buttonHit, buttonStay, buttonDoubleDown, buttonSplit, buttonBet; 
     	JPanel userPane, dealerPane, userCardPane;
     	JLabel labelMoney, labelBet, labelHand, labelDealerHand;
     	
@@ -404,10 +403,14 @@ public class Main extends Deck implements ActionListener{
     	userPane.setBackground(Color.gray);
     	buttonHit = new JButton("Hit");
     	buttonStay = new JButton("Stand");
+    	
     	buttonDoubleDown = new JButton("Double Down");
     	buttonDoubleDown.setEnabled(false);
     	buttonSplit = new JButton("Split");
     	buttonSplit.setEnabled(false);
+    	
+    	buttonBet = new JButton("Bet");
+    	
     	labelBet = new JLabel("0");
     	labelMoney = new JLabel("0");
     	labelHand = new JLabel("0");
@@ -488,8 +491,7 @@ public class Main extends Deck implements ActionListener{
     	
     	//bet, change according to andrew
     	
-    	int bet = 10;
-    	labelBet.setText(Integer.toString(bet));  
+    	labelBet.setText(Integer.toString(pBet));  
     }
     
     // hit stuff, change according to andrew
