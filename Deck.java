@@ -38,9 +38,11 @@ public class Deck {
 			pCards.add(cards[0].cNumber);
 		}
 		for(int i=0;i<cardsInDeck;i++) {
-		cards[i] = cards[i+1];
-		cards[cardsInDeck-1] = new Card(0,0);
+			if (!(i==51)) {	
+			cards[i] = cards[i+1];
+			}
 		}
+		cards[cardsInDeck-1] = new Card(0,0);
 		cardsInDeck--;
 		return cards[0];}
 		else {
@@ -59,10 +61,11 @@ public class Deck {
 			dCards.add(cards[0].cNumber);
 		}
 		for(int i=0;i<cardsInDeck;i++) {
+			if (!(i==51)) {
 			cards[i] = cards[i+1];
-			cards[cardsInDeck-1] = new Card(0,0);
-			System.out.println("dDeal");
 			}
+			}
+		cards[cardsInDeck-1] = new Card(0,0);
 		cardsInDeck--;
 		return cards[0];
 	}
