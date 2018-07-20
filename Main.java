@@ -1,5 +1,4 @@
 package Deck;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -8,7 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+
 import java.util.Scanner;
 
 import javax.swing.BorderFactory;
@@ -512,75 +511,17 @@ public class Main extends Deck implements ActionListener{
     class Stay implements ActionListener{
 			
     	public void actionPerformed(ActionEvent arg0) {
-
-    		// if functions for checking card values and stuff, may not need if andrew has it covered
-    		
-    		if(cash<=0) {
-    			
-    		}
 				
 		}
     		
     }
 	
-	public static void main(String[] args) {
+public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		
-        new Main().setVisible(true);
-
-		
-		
-		
-		/* 
-		 * 
-		 * THE GREAT DIVIDE
-		 * 
-		 * WAHHHH
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * andrew i want to kill you
-		 * 
-		 * 
-		 * 
-		 */
-		
-		
-		
 		Deck playingCards = new Deck();
 		Main actions = new Main();
-		
+		 
 		/* #########################Testing Testing##########################
 		shuffles and displays all cards
 				playingCards.shuffle(cards);
@@ -604,24 +545,28 @@ public class Main extends Deck implements ActionListener{
 
 		System.out.println("Welcome to Black Jack. You start with $200");
 		
-		while(playOn=true) {
+		while(playOn) {
+			
+			//Bet Amount, if Bet Amount > your Wallet, Request again
 			boolean eMoney = true;
 			while (eMoney) {
 			System.out.println("How much money would you like to bet?");
 			Scanner yourBet = new Scanner(System.in);
 			pBet = yourBet.nextInt();
-			if (pBet>pWallet)
-				System.out.println("not enough money");
-			if (pBet<=pWallet)
-				eMoney = false;
+				if (pBet>pWallet)
+					System.out.println("not enough money");
+				if (pBet<=pWallet)
+					eMoney = false;
 			}
 		
 			//Dealer's starting hand
 			playingCards.Dealerdeal(); 
 			System.out.println("The Dealer's exposed card is " + playingCards.Dealerdeal());
 			
+			//Your Starting Hand
 			System.out.println("your cards are " + playingCards.deal() + " and " + playingCards.deal());
 			
+			//Method for Playing
 			playingCards.play();
 			if(pWin) {
 				pWallet += pBet;
@@ -634,9 +579,12 @@ public class Main extends Deck implements ActionListener{
 			//Clear All Values from previous games
 			pHand = ""; dHand=""; pCards.clear(); dCards.clear();
 			
+			//Scanner for Choice Whether to Play Again
 			System.out.println("Play Again? (yes or no)");
 			Scanner yourChoice = new Scanner(System.in);
 			String choice = yourChoice.nextLine();
+			
+			//Loop GameOn or not 
 			switch(choice) {
 			case "yes": break;
 			case "no": System.out.println("Game Over"); playOn = false; break;
