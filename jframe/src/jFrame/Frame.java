@@ -29,16 +29,17 @@ public class Frame extends JFrame implements ActionListener {
         new Frame().setVisible(true);
     }
     
-    public int getStartingAmmt() {
+    public int getStartingAmmt() {  //starting money can change according to andrew's values
     	int amnt = 200;
     	return amnt; 
     }
     
-    public Frame() {
+    public Frame() {  // main frame
         super("BlackJack"); // title of tab thing
         setSize (800 ,600);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE); // default stuff
+        
         //home screen stuff
         
         JPanel MainPanel = new JPanel();
@@ -167,7 +168,8 @@ public class Frame extends JFrame implements ActionListener {
             SettingPanel.add (back); 
         } 
         
-        //help
+        //instructions panel
+        
         else if (name.equals("goInstructions")) {
             
             Container containI;  
@@ -280,11 +282,13 @@ public class Frame extends JFrame implements ActionListener {
             InstructionPanel.add (back); 
         }
         
-        //exit
+        //exit 
         
         else if (name.equals("quit")) {
             dispose(); //does what it sounds 
         }
+        
+        //listener for back button command
         
         else if (name.equals("back")) {
             Container containSBack; 
@@ -372,7 +376,8 @@ public class Frame extends JFrame implements ActionListener {
     	JPanel userPane, dealerPane, userCardPane;
     	JLabel labelMoney, labelBet, labelHand, labelDealerHand;
     	
-    	//dealer
+    	//dealer interface at top
+    	
     	dealerPane = new JPanel(new GridLayout(2,4));
     	Border dealerStuff = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Dealer");
     	dealerPane.setBorder(dealerStuff);
@@ -389,11 +394,13 @@ public class Frame extends JFrame implements ActionListener {
     	dealerPane.add(new JLabel(""));
 //        buttonDeal.addActionListener(new Dealer());
     	
-    	//cards
+    	//cards, middle of the screen
+    	
     	userCardPane = new JPanel(new GridLayout(3,7));
     	userCardPane.setBackground(Color.green);    
     	
-    	//user 
+    	//user, bottomn of the screen
+    	
     	userPane = new JPanel(new GridLayout(4,4));
     	Border userStuff = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "You");
     	userPane.setBorder(userStuff);
@@ -426,7 +433,8 @@ public class Frame extends JFrame implements ActionListener {
     	buttonHit.addActionListener(new HitMe());
     	buttonStay.addActionListener(new Stay());
     	
-    	// begins card test
+    	
+    	// begins card test, this is temp dunno if i will continue using
     	
 
     	JLabel cardLabel1;
@@ -470,19 +478,24 @@ public class Frame extends JFrame implements ActionListener {
     	
     	//end card test
     	
+    	
     	add(dealerPane, BorderLayout.NORTH);
     	add(userPane, BorderLayout.SOUTH);
     	add(userCardPane, BorderLayout.CENTER);
     	setVisible (true);
     	
-    	//money
+    	//money, change according to andrew
+    	
     	cash = getStartingAmmt();
     	labelMoney.setText(Integer.toString(cash));
     	
-    	//bet
+    	//bet, change according to andrew
+    	
     	int bet = 10;
-    	labelBet.setText(Integer.toString(bet));  //how bets work can be changed later down the road
+    	labelBet.setText(Integer.toString(bet));  
     }
+    
+    // hit stuff, change according to andrew
     
     class HitMe implements ActionListener{
     	
@@ -491,11 +504,13 @@ public class Frame extends JFrame implements ActionListener {
     	}
     }
     
+    // stay stuff, change according to andrew
+    
     class Stay implements ActionListener{
 			
     	public void actionPerformed(ActionEvent arg0) {
 
-    		// if functions for checking card values and stuff
+    		// if functions for checking card values and stuff, may not need if andrew has it covered
     		
     		if(cash<=0) {
     			
