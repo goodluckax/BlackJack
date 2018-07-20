@@ -97,7 +97,6 @@ public class Main extends Deck implements ActionListener{
         
         if (name.equals("startPlay")) {
            
-        	System.out.println("Playing.");  //debug
             Container containPInt;  
             containPInt = getContentPane();
             containPInt.removeAll();
@@ -177,7 +176,6 @@ public class Main extends Deck implements ActionListener{
             Container containI;  
             containI = getContentPane();
             containI.removeAll();
-        	System.out.println("Instructions."); //debug
             JPanel InstructionPanel = new JPanel();
             InstructionPanel.setSize(800, 600);
             InstructionPanel.setLocation(0, 0); 
@@ -358,7 +356,6 @@ public class Main extends Deck implements ActionListener{
          */
         
         else if(name.equals("startGame")) {
-        	System.out.println("Game Started.");  //debug
             Container containG;  
             containG = getContentPane();
             containG.removeAll();
@@ -371,8 +368,6 @@ public class Main extends Deck implements ActionListener{
     }        
     
     public void buildTable() {
-    	
-    	System.out.println("building table"); //debug
     	
     	JButton buttonDeal, buttonHit, buttonStay, buttonDoubleDown, buttonSplit; 
     	JPanel userPane, dealerPane, userCardPane;
@@ -502,7 +497,7 @@ public class Main extends Deck implements ActionListener{
     class HitMe implements ActionListener{
     	
     	public void actionPerformed(ActionEvent arg0) {
-    		
+    		hitMe();
     	}
     }
     
@@ -511,14 +506,18 @@ public class Main extends Deck implements ActionListener{
     class Stay implements ActionListener{
 			
     	public void actionPerformed(ActionEvent arg0) {
-				
+			stay();
 		}
     		
     }
 	
-public static void main(String[] args) {
-		// TODO Auto-generated method stub
+    public static void main(String[] args) {
 
+	// creates the jframe
+		new Main().setVisible(true);
+    	
+    	//rest is andrews
+    	
 		Deck playingCards = new Deck();
 		Main actions = new Main();
 		 
