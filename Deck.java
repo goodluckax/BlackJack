@@ -11,8 +11,8 @@ public class Deck {
 	private int cardsInDeck; // the current number of cards in the deck
 	public static ArrayList<Integer>  pCards = new ArrayList<>();//player cards
 	public static ArrayList<Integer>  dCards = new ArrayList<>();//dealer cards
-	public String pHand = "";
-	public String dHand = "";
+	public static String pHand = "";
+	public static String dHand = "";
 	public static boolean pWin = true;
 
 	public Deck() {
@@ -138,12 +138,13 @@ public class Deck {
 
 			}
 		}
+		System.out.println("The dealer's hand is " + dHand);
 		System.out.println("The dealer's total is " + dSum());
 		if(dSum()>=pSum() && dSum()<=21) {
 			System.out.println("The dealer wins!");
 			pWin = false;
 		}else {
-			System.out.println("You win!");
+			System.out.println("Dealer Busts! You win!");
 			pWin = true;
 		}
 	}
