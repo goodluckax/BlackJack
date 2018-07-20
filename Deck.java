@@ -99,11 +99,6 @@ public class Deck {
 		return sum;
 	}
 
-	public void getHand() {
-		for(int i=0; i < pCards.size();i++) {
-		System.out.println();
-		}
-	}
 	public void play() {
 		System.out.println("hit? stay?");
 		Scanner choice = new Scanner(System.in);
