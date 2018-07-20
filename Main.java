@@ -40,10 +40,16 @@ public class Main extends Deck{
 		System.out.println("Welcome to Black Jack. You start with $200");
 		
 		while(playOn=true) {
-			
+			boolean eMoney = true;
+			while (eMoney) {
 			System.out.println("How much money would you like to bet?");
 			Scanner yourBet = new Scanner(System.in);
 			pBet = yourBet.nextInt();
+			if (pBet>pWallet)
+				System.out.println("not enough money");
+			if (pBet<pWallet)
+				eMoney = false;
+			}
 		
 			//Dealer's starting hand
 			playingCards.Dealerdeal(); 
@@ -59,6 +65,10 @@ public class Main extends Deck{
 				pWallet -= pBet;
 				System.out.println("you have $" + pWallet + " left.");
 			}
+			
+			//Clear All Values from previous games
+			pHand = ""; dHand=""; pCards.clear(); dCards.clear();
+			
 			System.out.println("Play Again? (yes or no)");
 			Scanner yourChoice = new Scanner(System.in);
 			String choice = yourChoice.nextLine();
