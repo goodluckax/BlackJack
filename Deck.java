@@ -109,6 +109,9 @@ public class Deck {
 		for(int i=0;i<pCards.size();i++) {
 			sum = sum + pCards.get(i);
 			}
+		if (sum>21){
+		}
+			
 		return sum;
 	}
 	
