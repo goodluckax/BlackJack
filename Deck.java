@@ -3,6 +3,22 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
 //pages.cs.wisc.edu/~hasti/cs302/examples/Deck/Deck.java
 
 public class Deck {
@@ -30,6 +46,7 @@ public class Deck {
 	public Card deal() {
 		if (cardsInDeck>0) {
 		pHand = pHand + cards[0] + ", " ;
+		Card TEMPCard = cards[0];
 		if(cards[0].cNumber>10)
 			{
 			cards[0].cNumber = 10;
@@ -44,7 +61,7 @@ public class Deck {
 		}
 		cards[cardsInDeck-1] = new Card(0,0);
 		cardsInDeck--;
-		return cards[0];}
+		return TEMPCard;}
 		else {
 		System.out.println("ERROR: No More Cards");
 		return new Card(0,0);
@@ -53,6 +70,7 @@ public class Deck {
 	
 	public Card Dealerdeal() {
 		dHand = dHand + cards[0] + ", " ;
+		Card TEMPCard = cards[0];
 		if(cards[0].cNumber>10)
 		{
 			cards[0].cNumber = 10;
@@ -67,7 +85,7 @@ public class Deck {
 			}
 		cards[cardsInDeck-1] = new Card(0,0);
 		cardsInDeck--;
-		return cards[0];
+		return TEMPCard;
 	}
 	
 	public static void swapCards(Card[] a, int i, int swapped) {
@@ -134,10 +152,11 @@ public class Deck {
 				System.out.println("The dealer's hand is " + dHand);
 			}else {
 				dPlay = false;
-				System.out.println("The dealer's total is " + dSum());
+				System.out.println("The dealer's hand is " + dHand);
 			}
 		}
-		System.out.println("The dealer's hand is " + dHand);
+		
+		System.out.println("The dealer's total is " + dSum());
 		if(dSum()>=pSum() && dSum()<=21) {
 			System.out.println("The dealer wins!");
 			pWin = false;
