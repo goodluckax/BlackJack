@@ -134,12 +134,10 @@ public class Deck {
 				System.out.println("The dealer's hand is " + dHand);
 			}else {
 				dPlay = false;
-				
-
+				System.out.println("The dealer's total is " + dSum());
 			}
 		}
 		System.out.println("The dealer's hand is " + dHand);
-		System.out.println("The dealer's total is " + dSum());
 		if(dSum()>=pSum() && dSum()<=21) {
 			System.out.println("The dealer wins!");
 			pWin = false;
