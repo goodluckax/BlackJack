@@ -30,6 +30,8 @@ public class Deck {
 	public static String pHand = "";
 	public static String dHand = "";
 	public static boolean pWin = true;
+	public static int pAces = 0;
+	public static int dAces = 0;
 
 	public Deck() {
 		cards = new Card[DECK_SIZE];
@@ -47,11 +49,15 @@ public class Deck {
 		if (cardsInDeck>0) {
 		pHand = pHand + cards[0] + ", " ;
 		Card TEMPCard = cards[0];
-		if(cards[0].cNumber>10)
-			{
+		if(cards[0].cNumber>10){
 			cards[0].cNumber = 10;
 			pCards.add(cards[0].cNumber);
-		}else {
+		}else if(cards[0].cNumber==1){
+			cards.[0].cNumber = 11;
+			pAces ++;
+			pCards.add(cards[0].cNumber);
+			}
+		else {
 			pCards.add(cards[0].cNumber);
 		}
 		for(int i=0;i<cardsInDeck;i++) {
@@ -75,7 +81,12 @@ public class Deck {
 		{
 			cards[0].cNumber = 10;
 			dCards.add(cards[0].cNumber);
-		}else {
+		}else if(cards[0].cNumber==1){
+			cards.[0].cNumber = 11;
+			dAces ++;
+			dCards.add(cards[0].cNumber);
+			}
+		else{
 			dCards.add(cards[0].cNumber);
 		}
 		for(int i=0;i<cardsInDeck;i++) {
@@ -108,8 +119,10 @@ public class Deck {
 		int sum = 0;
 		for(int i=0;i<pCards.size();i++) {
 			sum = sum + pCards.get(i);
-			}
-		if (sum>21){
+		}
+		while (sum>21 && pAces>0){
+			sum -= 10;
+			pAces --;
 		}
 			
 		return sum;
@@ -119,7 +132,11 @@ public class Deck {
 		int sum = 0;
 		for(int i=0;i<dCards.size();i++) {
 			sum = sum + dCards.get(i);
-			}
+		}
+		while (sum>21 && dAces>0){
+			sum -= 10;
+			dAces --;
+		}
 		return sum;
 	}
 
@@ -137,6 +154,7 @@ public class Deck {
 	public void hitMe () {
 		deal();
 		System.out.println("your hand is now " + pHand);
+		System.out.println("your total is now " + pSum());
 		int bust = pSum();
 		if(bust > 22) {
 			System.out.println("Bust! you lose!");
