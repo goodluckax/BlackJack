@@ -566,6 +566,7 @@ public class Main extends Deck implements ActionListener{
 			
 			//Your Starting Hand
 			System.out.println("your cards are " + playingCards.deal() + " and " + playingCards.deal());
+			System.out.println("your total is " + pSum())
 			
 			//Method for Playing
 			playingCards.play();
