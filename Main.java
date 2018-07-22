@@ -579,7 +579,7 @@ public class Main extends Deck implements ActionListener{
 			}
 			
 			//Clear all values from previous games and resets the deck of Cards
-			pHand = ""; dHand=""; pCards.clear(); dCards.clear(); playingCards.Reset(cards);
+			pHand = ""; dHand=""; pCards.clear(); dCards.clear(); playingCards.Reset();
 			
 			//Scanner for Choice Whether to Play Again
 			System.out.println("Play Again? (yes or no)");
