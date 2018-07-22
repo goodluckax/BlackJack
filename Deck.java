@@ -36,7 +36,6 @@ public class Deck {
 	public Deck() {
 		cards = new Card[DECK_SIZE];
 		cardsInDeck = DECK_SIZE;
-		cardsInDeck = 52;
 		for (int i = 0; i < 13; i++) {
 			cards[i] = new Card(i + 1, Card.DIAMONDS);
 			cards[i + 13] = new Card(i + 1, Card.CLUBS);
@@ -44,6 +43,15 @@ public class Deck {
 			cards[i + 39] = new Card(i + 1, Card.SPADES);
 		}
 	}
+	
+	public Reset(newDeck[]) {
+		for (int i = 0; i < 13; i++) {
+			cards[i] = new Card(i + 1, Card.DIAMONDS);
+			cards[i + 13] = new Card(i + 1, Card.CLUBS);
+			cards[i + 26] = new Card(i + 1, Card.HEARTS);
+			cards[i + 39] = new Card(i + 1, Card.SPADES);
+		}
+	}	
 	
 	public Card deal() {
 		if (cardsInDeck>0) {
