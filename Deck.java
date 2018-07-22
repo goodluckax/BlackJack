@@ -44,7 +44,7 @@ public class Deck {
 		}
 	}
 	
-	public Reset(newDeck[]) {
+	public Reset() {
 		for (int i = 0; i < 13; i++) {
 			cards[i] = new Card(i + 1, Card.DIAMONDS);
 			cards[i + 13] = new Card(i + 1, Card.CLUBS);
