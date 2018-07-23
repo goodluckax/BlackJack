@@ -7,7 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.security.KeyStore.Builder;
 import java.util.Scanner;
 
 import javax.swing.BorderFactory;
@@ -27,6 +27,8 @@ public class Main extends Deck implements ActionListener{
 	public int pSum;
 	
     int cash = 0;
+    
+	static boolean playOn = false;
 	
 	private static final long serialVersionUID = 1L;
     //default serial version ID no idea what it does but I think i need it???
@@ -52,9 +54,9 @@ public class Main extends Deck implements ActionListener{
         this.getContentPane().add(MainPanel); 
         
         JLabel title = new JLabel("BlackJack", JLabel.CENTER);
-        title.setSize(150,70);
-        title.setLocation(320,110); // i hate coordinates
-        title.setFont(new Font("Serif", Font.PLAIN, 30));
+        title.setSize(250,70);
+        title.setLocation(275,110); // i hate coordinates
+        title.setFont(new Font("Impact", Font.BOLD, 50));
         MainPanel.add (title);
         
         JButton play = new JButton("Play");
@@ -300,9 +302,9 @@ public class Main extends Deck implements ActionListener{
             this.getContentPane().add(MainPanel); 
             
             JLabel title = new JLabel("BlackJack", JLabel.CENTER);
-            title.setSize(150,70);
-            title.setLocation(320,110); 
-            title.setFont(new Font("Serif", Font.PLAIN, 30));
+            title.setSize(250,70);
+            title.setLocation(275,110); // i hate coordinates
+            title.setFont(new Font("Impact", Font.BOLD, 50));
             MainPanel.add (title);
             
             JButton play = new JButton("Play");
@@ -361,6 +363,7 @@ public class Main extends Deck implements ActionListener{
             setVisible(true);
             buildTable();
             repaint();
+    		playOn = true; 
             getContentPane().setBackground(Color.GREEN);
         }
         
@@ -368,7 +371,7 @@ public class Main extends Deck implements ActionListener{
     
     public void buildTable() {
     	
-    	JButton buttonDeal, buttonHit, buttonStay, buttonDoubleDown, buttonSplit, buttonBet; 
+    	JButton buttonDeal, buttonHit, buttonStay, buttonDoubleDown, buttonSplit, buttonBet10, buttonBet20; 
     	JPanel userPane, dealerPane, userCardPane;
     	JLabel labelMoney, labelBet, labelHand, labelDealerHand;
     	
@@ -378,8 +381,8 @@ public class Main extends Deck implements ActionListener{
     	Border dealerStuff = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Dealer");
     	dealerPane.setBorder(dealerStuff);
     	dealerPane.setBackground(Color.gray);
-    	buttonDeal = new JButton("Deal"); 
-    	labelDealerHand = new JLabel("0");
+    	buttonDeal = new JButton("Play"); 
+    	labelDealerHand = new JLabel(dHand);
         dealerPane.add(buttonDeal);
     	dealerPane.add(new JLabel(""));
     	dealerPane.add(new JLabel(""));
@@ -388,7 +391,7 @@ public class Main extends Deck implements ActionListener{
     	dealerPane.add(labelDealerHand);
     	dealerPane.add(new JLabel(""));
     	dealerPane.add(new JLabel(""));
-//        buttonDeal.addActionListener(new Dealer());
+    	buttonDeal.addActionListener(new Deal());
     	
     	//cards, middle of the screen
     	
@@ -401,19 +404,25 @@ public class Main extends Deck implements ActionListener{
     	Border userStuff = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "You");
     	userPane.setBorder(userStuff);
     	userPane.setBackground(Color.gray);
+    	
     	buttonHit = new JButton("Hit");
+    	buttonHit.setEnabled(false);
     	buttonStay = new JButton("Stand");
+    	buttonStay.setEnabled(false);
     	
     	buttonDoubleDown = new JButton("Double Down");
     	buttonDoubleDown.setEnabled(false);
     	buttonSplit = new JButton("Split");
     	buttonSplit.setEnabled(false);
     	
-    	buttonBet = new JButton("Bet");
+    	buttonBet10 = new JButton("Bet 10");
+    	buttonBet10.setEnabled(false);
+    	buttonBet20 = new JButton("Bet 20");
+    	buttonBet20.setEnabled(false);
     	
     	labelBet = new JLabel("0");
     	labelMoney = new JLabel("0");
-    	labelHand = new JLabel("0");
+    	labelHand = new JLabel(pHand);
     	userPane.add(new JLabel("Your Hand Value:"));
     	userPane.add(labelHand);
     	userPane.add(new JLabel("")); //honestly i am stupid but it works lol
@@ -424,34 +433,35 @@ public class Main extends Deck implements ActionListener{
     	userPane.add(new JLabel(""));
     	userPane.add(new JLabel("Your Bet: "));
     	userPane.add(labelBet);
-    	userPane.add(new JLabel(""));
-    	userPane.add(new JLabel(""));
+    	userPane.add(buttonBet10);
+    	userPane.add(buttonBet20);
     	userPane.add(buttonHit);
     	userPane.add(buttonStay);
     	userPane.add(buttonDoubleDown);
     	userPane.add(buttonSplit);
     	buttonHit.addActionListener(new HitMe());
     	buttonStay.addActionListener(new Stay());
-    	
-    	
+    	buttonBet10.addActionListener(new Bet10());
+    	buttonBet20.addActionListener(new Bet20());
+
     	// begins card test, this is temp dunno if i will continue using
     	
 
     	JLabel cardLabel1;
     	cardLabel1 = new JLabel(""); 
-    	Image card1 = new ImageIcon(this.getClass().getResource("/10D.png")).getImage().getScaledInstance(70, 107, 100);
+    	Image card1 = new ImageIcon(this.getClass().getResource("/gray_back.png")).getImage().getScaledInstance(70, 107, 100);
     	cardLabel1.setIcon(new ImageIcon(card1));
     	userCardPane.add(cardLabel1);
     	
     	JLabel cardLabel2;
     	cardLabel2 = new JLabel(""); 
-    	Image card2 = new ImageIcon(this.getClass().getResource("/2S.png")).getImage().getScaledInstance(70, 107, 100);
+    	Image card2 = new ImageIcon(this.getClass().getResource("")).getImage().getScaledInstance(70, 107, 100);
     	cardLabel2.setIcon(new ImageIcon(card2));
     	userCardPane.add(cardLabel2);
     	
     	JLabel cardLabel3;
     	cardLabel3 = new JLabel(""); 
-    	Image card3 = new ImageIcon(this.getClass().getResource("/3H.png")).getImage().getScaledInstance(70, 107, 100);
+    	Image card3 = new ImageIcon(this.getClass().getResource("/")).getImage().getScaledInstance(70, 107, 100);
     	cardLabel3.setIcon(new ImageIcon(card3));
     	userCardPane.add(cardLabel3);
     	
@@ -499,7 +509,10 @@ public class Main extends Deck implements ActionListener{
     class HitMe implements ActionListener{
     	
     	public void actionPerformed(ActionEvent arg0) {
-    		hitMe();
+    		while(playOn) {
+    			hitMe();
+    		}
+    		System.out.println("testing");
     	}
     }
     
@@ -508,11 +521,108 @@ public class Main extends Deck implements ActionListener{
     class Stay implements ActionListener{
 			
     	public void actionPerformed(ActionEvent arg0) {
-			stay();
-		}
-    		
+    		while(playOn) {
+    			stay();
+    			}		
+    	}
     }
 	
+    class Bet10 implements ActionListener{
+		
+    	public void actionPerformed(ActionEvent arg0) {
+    		while(playOn) {
+    			pBet = 10;
+    			System.out.println("You have bet " + pBet); //debug
+    			}
+    	}
+    }
+    
+    class Bet20 extends Main implements ActionListener{
+		
+    	public void actionPerformed(ActionEvent arg0) {
+    		while(playOn) {
+    			pBet = 20;
+    			System.out.println("You have bet " + pBet); //debug
+    			
+//    			buttonHit.setEnabled(true);
+//    			buttonStay.setEnabled(true);
+//    			buttonDoubleDown.setEnabled(true);
+//    			buttonSplit.setEnabled(true);
+    	    	
+    			}		
+    	}
+    }
+    
+    class Deal extends Main implements ActionListener{
+		
+    	public void actionPerformed(ActionEvent arg0) {
+
+			System.out.println("Welcome to Black Jack. You start with $200");
+			
+//        	buttonBet10.setEnabled(true);
+//        	buttonBet20.setEnabled(true);
+    		
+    		while(playOn) {
+    			
+    			Deck playingCards = new Deck();
+    			Main actions = new Main();
+    			
+    			playingCards.shuffle(cards);
+
+    			
+    			//Bet Amount, if Bet Amount > your Wallet, Request again
+    			boolean eMoney = true;
+    			while (eMoney) {
+    			System.out.println("How much money would you like to bet?");
+    			Scanner yourBet = new Scanner(System.in);
+    			pBet = yourBet.nextInt();
+    				if (pBet>pWallet)
+    					System.out.println("not enough money");
+    				if (pBet<=pWallet)
+    					eMoney = false;  				
+    				}
+    			
+    			//Dealer's starting hand
+    			playingCards.Dealerdeal(); 
+    			System.out.println("The Dealer's exposed card is " + playingCards.Dealerdeal());
+    			
+    			//Your Starting Hand
+    			System.out.println("your cards are " + playingCards.deal() + " and " + playingCards.deal());
+    			
+    			//Method for Playing
+    			playingCards.play();
+    			if(pWin) {
+    				pWallet += pBet;
+    				System.out.println("you have $" + pWallet + " left.");
+    			}
+    			else if(tie) {
+    				pWallet = pWallet;
+    				System.out.println("you have $" + pWallet + " left.");
+    			}
+    			else {
+    				pWallet -= pBet;
+    				System.out.println("you have $" + pWallet + " left.");
+    			}
+    			
+    			//Clear All Values from previous games
+    			pHand = ""; dHand=""; pCards.clear(); dCards.clear();
+    			
+    			//Scanner for Choice Whether to Play Again
+    			System.out.println("Play Again? (yes or no)");
+    			Scanner yourChoice = new Scanner(System.in);
+    			String choice = yourChoice.nextLine();
+    			
+    			//Loop GameOn or not 
+    			switch(choice) {
+    			case "yes": break;
+    			case "no": System.out.println("Game Over"); playOn = false; break;
+    			}
+    			
+    		}
+    		
+    	}
+    }
+    
     public static void main(String[] args) {
 
 	// creates the jframe
@@ -541,58 +651,59 @@ public class Main extends Deck implements ActionListener{
 			}
 			***************************Testing Testing************************ */
 		playingCards.shuffle(cards);
-		boolean playOn = true;
 		
 
-		System.out.println("Welcome to Black Jack. You start with $200");
 		
-		while(playOn) {
-			
-			//Bet Amount, if Bet Amount > your Wallet, Request again
-			boolean eMoney = true;
-			while (eMoney) {
-			System.out.println("How much money would you like to bet?");
-			Scanner yourBet = new Scanner(System.in);
-			pBet = yourBet.nextInt();
-				if (pBet>pWallet)
-					System.out.println("not enough money");
-				if (pBet<=pWallet)
-					eMoney = false;
-			}
 		
-			//Dealer's starting hand
-			playingCards.Dealerdeal(); 
-			System.out.println("The Dealer's exposed card is " + playingCards.Dealerdeal());
-			
-			//Your Starting Hand
-			System.out.println("your cards are " + playingCards.deal() + " and " + playingCards.deal());
-			System.out.println("your total is " + pSum())
-			
-			//Method for Playing
-			playingCards.play();
-			if(pWin) {
-				pWallet += pBet;
-				System.out.println("you have $" + pWallet + " left.");
-			}else {
-				pWallet -= pBet;
-				System.out.println("you have $" + pWallet + " left.");
-			}
-			
-			//Clear all values from previous games and resets the deck of Cards
-			pHand = ""; dHand=""; pCards.clear(); dCards.clear(); playingCards.Reset();
-			
-			//Scanner for Choice Whether to Play Again
-			System.out.println("Play Again? (yes or no)");
-			Scanner yourChoice = new Scanner(System.in);
-			String choice = yourChoice.nextLine();
-			
-			//Loop GameOn or not 
-			switch(choice) {
-			case "yes": break;
-			case "no": System.out.println("Game Over"); playOn = false; break;
-			}
-			
-		}
+//		while(playOn) {
+//			
+//			System.out.println("Welcome to Black Jack. You start with $200");
+//			
+//			//Bet Amount, if Bet Amount > your Wallet, Request again
+//			boolean eMoney = true;
+//			while (eMoney) {
+//			System.out.println("How much money would you like to bet?");
+//			Scanner yourBet = new Scanner(System.in);
+//			pBet = yourBet.nextInt();
+//				if (pBet>pWallet)
+//					System.out.println("not enough money");
+//				if (pBet<=pWallet)
+//					eMoney = false;
+//			}
+//		
+//			//Dealer's starting hand
+//			playingCards.Dealerdeal(); 
+//			System.out.println("The Dealer's exposed card is " + playingCards.Dealerdeal());
+//			
+//			//Your Starting Hand
+//			System.out.println("your cards are " + playingCards.deal() + " and " + playingCards.deal());
+//			
+//			//Method for Playing
+//			playingCards.play();
+//			if(pWin) {
+//				pWallet += pBet;
+//				System.out.println("you have $" + pWallet + " left.");
+//			}
+//			else {
+//				pWallet -= pBet;
+//				System.out.println("you have $" + pWallet + " left.");
+//			}
+//			
+//			//Clear All Values from previous games
+//			pHand = ""; dHand=""; pCards.clear(); dCards.clear();
+//			
+//			//Scanner for Choice Whether to Play Again
+//			System.out.println("Play Again? (yes or no)");
+//			Scanner yourChoice = new Scanner(System.in);
+//			String choice = yourChoice.nextLine();
+//			
+//			//Loop GameOn or not 
+//			switch(choice) {
+//			case "yes": break;
+//			case "no": System.out.println("Game Over"); playOn = false; break;
+//			}
+//			
+//		}
 
 }
 }
