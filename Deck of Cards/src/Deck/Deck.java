@@ -3,17 +3,21 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+
+
 //pages.cs.wisc.edu/~hasti/cs302/examples/Deck/Deck.java
 
-public class Deck {
+public class Deck extends JFrame {
 	public static final int DECK_SIZE = 52;
 	public static Card[] cards; // array holding all 52 cards
 	private int cardsInDeck; // the current number of cards in the deck
 	public static ArrayList<Integer>  pCards = new ArrayList<>();//player cards
 	public static ArrayList<Integer>  dCards = new ArrayList<>();//dealer cards
-	public String pHand = "";
-	public String dHand = "";
+	public static String pHand = "";
+	public static String dHand = "";
 	public static boolean pWin = true;
+	public static boolean tie = false;
 
 	public Deck() {
 		cards = new Card[DECK_SIZE];
@@ -38,9 +42,11 @@ public class Deck {
 			pCards.add(cards[0].cNumber);
 		}
 		for(int i=0;i<cardsInDeck;i++) {
-		cards[i] = cards[i+1];
-		cards[cardsInDeck-1] = new Card(0,0);
+			if (!(i==51)) {	
+			cards[i] = cards[i+1];
+			}
 		}
+		cards[cardsInDeck-1] = new Card(0,0);
 		cardsInDeck--;
 		return cards[0];}
 		else {
@@ -59,10 +65,11 @@ public class Deck {
 			dCards.add(cards[0].cNumber);
 		}
 		for(int i=0;i<cardsInDeck;i++) {
+			if (!(i==51)) {
 			cards[i] = cards[i+1];
-			cards[cardsInDeck-1] = new Card(0,0);
-			System.out.println("dDeal");
 			}
+			}
+		cards[cardsInDeck-1] = new Card(0,0);
 		cardsInDeck--;
 		return cards[0];
 	}
@@ -99,11 +106,6 @@ public class Deck {
 		return sum;
 	}
 
-	public void getHand() {
-		for(int i=0; i < pCards.size();i++) {
-		System.out.println();
-		}
-	}
 	public void play() {
 		System.out.println("hit? stay?");
 		Scanner choice = new Scanner(System.in);
@@ -122,8 +124,10 @@ public class Deck {
 		if(bust > 22) {
 			System.out.println("Bust! you lose!");
 			pWin = false;
+			tie = false;
 		}else {
 			play();
+			
 		}
 	}
 	
@@ -136,16 +140,20 @@ public class Deck {
 				System.out.println("The dealer's hand is " + dHand);
 			}else {
 				dPlay = false;
-				
-
+				System.out.println("The dealer's hand is " + dHand);
+				System.out.println("The dealer's total is " + dSum());
 			}
 		}
-		System.out.println("The dealer's total is " + dSum());
 		if(dSum()>=pSum() && dSum()<=21) {
 			System.out.println("The dealer wins!");
 			pWin = false;
-		}else {
-			System.out.println("You win!");
+		}
+		else if(dSum()==pSum() && dSum()<=21) {
+			System.out.println("Tie.");
+			tie = true;
+		}
+		else {
+			System.out.println("Dealer Loses! You win!");
 			pWin = true;
 		}
 	}
