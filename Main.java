@@ -1,5 +1,4 @@
-package jFrame;
-
+package Deck;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -8,34 +7,39 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.KeyStore.Builder;
+import java.util.Scanner;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-public class Frame extends JFrame implements ActionListener {
-    
+
+public class Main extends Deck implements ActionListener{
+
+	//Player Wallet
+	public static int pWallet = 200;
+	public static int pBet = 0;
+	public int pSum;
+	
     int cash = 0;
+    
+	static boolean playOn = false;
 	
 	private static final long serialVersionUID = 1L;
     //default serial version ID no idea what it does but I think i need it???
-
-    public static void main(String[] args) {
-        new Frame().setVisible(true);
-    }
-    
+	
     public int getStartingAmmt() {  //starting money can change according to andrew's values
     	int amnt = 200;
     	return amnt; 
     }
     
-    public Frame() {  // main frame
-        super("BlackJack"); // title of tab thing
+    public Main() {  // main frame
+        super(); // title of tab thing
         setSize (800 ,600);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE); // default stuff
@@ -50,9 +54,9 @@ public class Frame extends JFrame implements ActionListener {
         this.getContentPane().add(MainPanel); 
         
         JLabel title = new JLabel("BlackJack", JLabel.CENTER);
-        title.setSize(150,70);
-        title.setLocation(320,110); // i hate coordinates
-        title.setFont(new Font("Serif", Font.PLAIN, 30));
+        title.setSize(250,70);
+        title.setLocation(275,110); // i hate coordinates
+        title.setFont(new Font("Impact", Font.BOLD, 50));
         MainPanel.add (title);
         
         JButton play = new JButton("Play");
@@ -95,7 +99,6 @@ public class Frame extends JFrame implements ActionListener {
         
         if (name.equals("startPlay")) {
            
-        	System.out.println("Playing.");  //debug
             Container containPInt;  
             containPInt = getContentPane();
             containPInt.removeAll();
@@ -126,7 +129,6 @@ public class Frame extends JFrame implements ActionListener {
         
         else if (name.equals("goSetting")) {
             
-        	System.out.println("In settings."); //debug
             Container containS;  
             containS = getContentPane();
             containS.removeAll();
@@ -175,7 +177,6 @@ public class Frame extends JFrame implements ActionListener {
             Container containI;  
             containI = getContentPane();
             containI.removeAll();
-        	System.out.println("Instructions."); //debug
             JPanel InstructionPanel = new JPanel();
             InstructionPanel.setSize(800, 600);
             InstructionPanel.setLocation(0, 0); 
@@ -202,7 +203,7 @@ public class Frame extends JFrame implements ActionListener {
             i2.setFont(new Font("Serif", Font.PLAIN, 14));
             InstructionPanel.add (i2); 
             
-            JLabel i2a = new JLabel("going over 21");
+            JLabel i2a = new JLabel("going over 21.");
             i2a.setSize(700,40);
             i2a.setLocation(40,155);
             i2a.setFont(new Font("Serif", Font.PLAIN, 14));
@@ -288,7 +289,7 @@ public class Frame extends JFrame implements ActionListener {
             dispose(); //does what it sounds 
         }
         
-        //listener for back button command
+        //listener for back button command this is a lot of stupid code
         
         else if (name.equals("back")) {
             Container containSBack; 
@@ -301,9 +302,9 @@ public class Frame extends JFrame implements ActionListener {
             this.getContentPane().add(MainPanel); 
             
             JLabel title = new JLabel("BlackJack", JLabel.CENTER);
-            title.setSize(150,70);
-            title.setLocation(320,110); 
-            title.setFont(new Font("Serif", Font.PLAIN, 30));
+            title.setSize(250,70);
+            title.setLocation(275,110); // i hate coordinates
+            title.setFont(new Font("Impact", Font.BOLD, 50));
             MainPanel.add (title);
             
             JButton play = new JButton("Play");
@@ -356,13 +357,13 @@ public class Frame extends JFrame implements ActionListener {
          */
         
         else if(name.equals("startGame")) {
-        	System.out.println("Game Started.");  //debug
             Container containG;  
             containG = getContentPane();
             containG.removeAll();
             setVisible(true);
             buildTable();
             repaint();
+    		playOn = true; 
             getContentPane().setBackground(Color.GREEN);
         }
         
@@ -370,9 +371,7 @@ public class Frame extends JFrame implements ActionListener {
     
     public void buildTable() {
     	
-    	System.out.println("building table"); //debug
-    	
-    	JButton buttonDeal, buttonHit, buttonStay, buttonDoubleDown, buttonSplit; 
+    	JButton buttonDeal, buttonHit, buttonStay, buttonDoubleDown, buttonSplit, buttonBet10, buttonBet20; 
     	JPanel userPane, dealerPane, userCardPane;
     	JLabel labelMoney, labelBet, labelHand, labelDealerHand;
     	
@@ -382,8 +381,8 @@ public class Frame extends JFrame implements ActionListener {
     	Border dealerStuff = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Dealer");
     	dealerPane.setBorder(dealerStuff);
     	dealerPane.setBackground(Color.gray);
-    	buttonDeal = new JButton("Deal"); 
-    	labelDealerHand = new JLabel("0");
+    	buttonDeal = new JButton("Play"); 
+    	labelDealerHand = new JLabel(dHand);
         dealerPane.add(buttonDeal);
     	dealerPane.add(new JLabel(""));
     	dealerPane.add(new JLabel(""));
@@ -392,28 +391,38 @@ public class Frame extends JFrame implements ActionListener {
     	dealerPane.add(labelDealerHand);
     	dealerPane.add(new JLabel(""));
     	dealerPane.add(new JLabel(""));
-//        buttonDeal.addActionListener(new Dealer());
+    	buttonDeal.addActionListener(new Deal());
     	
     	//cards, middle of the screen
     	
     	userCardPane = new JPanel(new GridLayout(3,7));
     	userCardPane.setBackground(Color.green);    
     	
-    	//user, bottomn of the screen
+    	//user, bottom of the screen
     	
     	userPane = new JPanel(new GridLayout(4,4));
     	Border userStuff = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "You");
     	userPane.setBorder(userStuff);
     	userPane.setBackground(Color.gray);
+    	
     	buttonHit = new JButton("Hit");
+    	buttonHit.setEnabled(false);
     	buttonStay = new JButton("Stand");
+    	buttonStay.setEnabled(false);
+    	
     	buttonDoubleDown = new JButton("Double Down");
     	buttonDoubleDown.setEnabled(false);
     	buttonSplit = new JButton("Split");
     	buttonSplit.setEnabled(false);
+    	
+    	buttonBet10 = new JButton("Bet 10");
+    	buttonBet10.setEnabled(false);
+    	buttonBet20 = new JButton("Bet 20");
+    	buttonBet20.setEnabled(false);
+    	
     	labelBet = new JLabel("0");
     	labelMoney = new JLabel("0");
-    	labelHand = new JLabel("0");
+    	labelHand = new JLabel(pHand);
     	userPane.add(new JLabel("Your Hand Value:"));
     	userPane.add(labelHand);
     	userPane.add(new JLabel("")); //honestly i am stupid but it works lol
@@ -424,34 +433,35 @@ public class Frame extends JFrame implements ActionListener {
     	userPane.add(new JLabel(""));
     	userPane.add(new JLabel("Your Bet: "));
     	userPane.add(labelBet);
-    	userPane.add(new JLabel(""));
-    	userPane.add(new JLabel(""));
+    	userPane.add(buttonBet10);
+    	userPane.add(buttonBet20);
     	userPane.add(buttonHit);
     	userPane.add(buttonStay);
     	userPane.add(buttonDoubleDown);
     	userPane.add(buttonSplit);
     	buttonHit.addActionListener(new HitMe());
     	buttonStay.addActionListener(new Stay());
-    	
-    	
+    	buttonBet10.addActionListener(new Bet10());
+    	buttonBet20.addActionListener(new Bet20());
+
     	// begins card test, this is temp dunno if i will continue using
     	
 
     	JLabel cardLabel1;
     	cardLabel1 = new JLabel(""); 
-    	Image card1 = new ImageIcon(this.getClass().getResource("/10D.png")).getImage().getScaledInstance(70, 107, 100);
+    	Image card1 = new ImageIcon(this.getClass().getResource("/gray_back.png")).getImage().getScaledInstance(70, 107, 100);
     	cardLabel1.setIcon(new ImageIcon(card1));
     	userCardPane.add(cardLabel1);
     	
     	JLabel cardLabel2;
     	cardLabel2 = new JLabel(""); 
-    	Image card2 = new ImageIcon(this.getClass().getResource("/AS.png")).getImage().getScaledInstance(70, 107, 100);
+    	Image card2 = new ImageIcon(this.getClass().getResource("")).getImage().getScaledInstance(70, 107, 100);
     	cardLabel2.setIcon(new ImageIcon(card2));
     	userCardPane.add(cardLabel2);
     	
     	JLabel cardLabel3;
     	cardLabel3 = new JLabel(""); 
-    	Image card3 = new ImageIcon(this.getClass().getResource("")).getImage().getScaledInstance(70, 107, 100);
+    	Image card3 = new ImageIcon(this.getClass().getResource("/")).getImage().getScaledInstance(70, 107, 100);
     	cardLabel3.setIcon(new ImageIcon(card3));
     	userCardPane.add(cardLabel3);
     	
@@ -491,8 +501,7 @@ public class Frame extends JFrame implements ActionListener {
     	
     	//bet, change according to andrew
     	
-    	int bet = 10;
-    	labelBet.setText(Integer.toString(bet));  
+    	labelBet.setText(Integer.toString(pBet));  
     }
     
     // hit stuff, change according to andrew
@@ -500,7 +509,10 @@ public class Frame extends JFrame implements ActionListener {
     class HitMe implements ActionListener{
     	
     	public void actionPerformed(ActionEvent arg0) {
-    		
+    		while(playOn) {
+    			hitMe();
+    		}
+    		System.out.println("testing");
     	}
     }
     
@@ -509,15 +521,189 @@ public class Frame extends JFrame implements ActionListener {
     class Stay implements ActionListener{
 			
     	public void actionPerformed(ActionEvent arg0) {
-
-    		// if functions for checking card values and stuff, may not need if andrew has it covered
-    		
-    		if(cash<=0) {
-    			
-    		}
-				
-		}
-    		
+    		while(playOn) {
+    			stay();
+    			}		
+    	}
+    }
+	
+    class Bet10 implements ActionListener{
+		
+    	public void actionPerformed(ActionEvent arg0) {
+    		while(playOn) {
+    			pBet = 10;
+    			System.out.println("You have bet " + pBet); //debug
+    			}
+    	}
     }
     
+    class Bet20 extends Main implements ActionListener{
+		
+    	public void actionPerformed(ActionEvent arg0) {
+    		while(playOn) {
+    			pBet = 20;
+    			System.out.println("You have bet " + pBet); //debug
+    			
+//    			buttonHit.setEnabled(true);
+//    			buttonStay.setEnabled(true);
+//    			buttonDoubleDown.setEnabled(true);
+//    			buttonSplit.setEnabled(true);
+    	    	
+    			}		
+    	}
+    }
+    
+    class Deal extends Main implements ActionListener{
+		
+    	public void actionPerformed(ActionEvent arg0) {
+
+			System.out.println("Welcome to Black Jack. You start with $200");
+			
+//        	buttonBet10.setEnabled(true);
+//        	buttonBet20.setEnabled(true);
+    		
+    		while(playOn) {
+    			
+    			Deck playingCards = new Deck();
+    			Main actions = new Main();
+    			
+    			playingCards.shuffle(cards);
+
+    			
+    			//Bet Amount, if Bet Amount > your Wallet, Request again
+    			boolean eMoney = true;
+    			while (eMoney) {
+    			System.out.println("How much money would you like to bet?");
+    			Scanner yourBet = new Scanner(System.in);
+    			pBet = yourBet.nextInt();
+    				if (pBet>pWallet)
+    					System.out.println("not enough money");
+    				if (pBet<=pWallet)
+    					eMoney = false;  				
+    				}
+    			
+    			//Dealer's starting hand
+    			playingCards.Dealerdeal(); 
+    			System.out.println("The Dealer's exposed card is " + playingCards.Dealerdeal());
+    			
+    			//Your Starting Hand
+    			System.out.println("your cards are " + playingCards.deal() + " and " + playingCards.deal());
+    			
+    			//Method for Playing
+    			playingCards.play();
+    			if(pWin) {
+    				pWallet += pBet;
+    				System.out.println("you have $" + pWallet + " left.");
+    			}
+    			else if(tie) {
+    				pWallet = pWallet;
+    				System.out.println("you have $" + pWallet + " left.");
+    			}
+    			else {
+    				pWallet -= pBet;
+    				System.out.println("you have $" + pWallet + " left.");
+    			}
+    			
+    			//Clear All Values from previous games
+    			pHand = ""; dHand=""; pCards.clear(); dCards.clear();
+    			
+    			//Scanner for Choice Whether to Play Again
+    			System.out.println("Play Again? (yes or no)");
+    			Scanner yourChoice = new Scanner(System.in);
+    			String choice = yourChoice.nextLine();
+    			
+    			//Loop GameOn or not 
+    			switch(choice) {
+    			case "yes": break;
+    			case "no": System.out.println("Game Over"); playOn = false; break;
+    			}
+    			
+    		}
+    		
+    	}
+    }
+    
+    public static void main(String[] args) {
+
+	// creates the jframe
+		new Main().setVisible(true);
+    	
+    	//rest is andrews
+    	
+		Deck playingCards = new Deck();
+		Main actions = new Main();
+		 
+		/* #########################Testing Testing##########################
+		shuffles and displays all cards
+				playingCards.shuffle(cards);
+			    for (Card i : cards) {
+			          System.out.println(i);
+			     }
+				
+				Dealing Tester
+				int choice = 1;
+			    while(choice==1) {
+			    	System.out.println(playingCards.deal());
+			    	Scanner yourDeal = new Scanner(System.in);
+			    	System.out.println("Deal? 1=Deal");
+			    	choice = yourDeal.nextInt();
+			    	System.out.println(cardsInDeck);
+			}
+			***************************Testing Testing************************ */
+		playingCards.shuffle(cards);
+		
+
+		
+		
+//		while(playOn) {
+//			
+//			System.out.println("Welcome to Black Jack. You start with $200");
+//			
+//			//Bet Amount, if Bet Amount > your Wallet, Request again
+//			boolean eMoney = true;
+//			while (eMoney) {
+//			System.out.println("How much money would you like to bet?");
+//			Scanner yourBet = new Scanner(System.in);
+//			pBet = yourBet.nextInt();
+//				if (pBet>pWallet)
+//					System.out.println("not enough money");
+//				if (pBet<=pWallet)
+//					eMoney = false;
+//			}
+//		
+//			//Dealer's starting hand
+//			playingCards.Dealerdeal(); 
+//			System.out.println("The Dealer's exposed card is " + playingCards.Dealerdeal());
+//			
+//			//Your Starting Hand
+//			System.out.println("your cards are " + playingCards.deal() + " and " + playingCards.deal());
+//			
+//			//Method for Playing
+//			playingCards.play();
+//			if(pWin) {
+//				pWallet += pBet;
+//				System.out.println("you have $" + pWallet + " left.");
+//			}
+//			else {
+//				pWallet -= pBet;
+//				System.out.println("you have $" + pWallet + " left.");
+//			}
+//			
+//			//Clear All Values from previous games
+//			pHand = ""; dHand=""; pCards.clear(); dCards.clear();
+//			
+//			//Scanner for Choice Whether to Play Again
+//			System.out.println("Play Again? (yes or no)");
+//			Scanner yourChoice = new Scanner(System.in);
+//			String choice = yourChoice.nextLine();
+//			
+//			//Loop GameOn or not 
+//			switch(choice) {
+//			case "yes": break;
+//			case "no": System.out.println("Game Over"); playOn = false; break;
+//			}
+//			
+//		}
+
+}
 }
